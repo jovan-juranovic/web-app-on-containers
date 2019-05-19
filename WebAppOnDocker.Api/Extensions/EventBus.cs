@@ -19,13 +19,13 @@ namespace WebAppOnDocker.Api.Extensions
             {
                 var logger = provider.GetRequiredService<ILogger<DefaultServiceBusPersisterConnection>>();
 
-                var serviceBusConnectionString = configuration["EventBusConnectionString"];
+                var serviceBusConnectionString = configuration["EventBus:ConnectionString"];
                 var serviceBusConnection = new ServiceBusConnectionStringBuilder(serviceBusConnectionString);
 
                 return new DefaultServiceBusPersisterConnection(logger, serviceBusConnection);
             });
 
-            var subscriptionName = configuration["SubscriptionName"];
+            var subscriptionName = configuration["EventBus:SubscriptionName"];
             services.AddSingleton<IEventBus, EventBusServiceBus>(provider =>
             {
                 var scope = provider.GetRequiredService<ILifetimeScope>();

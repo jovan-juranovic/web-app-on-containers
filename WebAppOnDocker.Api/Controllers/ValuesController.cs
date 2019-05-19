@@ -1,7 +1,5 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using WebAppOnDocker.Shared.EventBus.Abstractions;
 
 namespace WebAppOnDocker.Api.Controllers
@@ -18,9 +16,8 @@ namespace WebAppOnDocker.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<string>>> Get()
+        public ActionResult<IEnumerable<string>> Get()
         {
-            throw new Exception("test");
             return new[] { "value1", "value2" };
         }
 

@@ -23,8 +23,6 @@ namespace WebAppOnDocker.Api
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            _logger.LogInformation("Application started.");
-
             services.AddApplicationInsightsTelemetry(Configuration);
             services.AddCorsWithAllowedAnyPolicy();
 
@@ -32,15 +30,16 @@ namespace WebAppOnDocker.Api
             services.AddCustomMvc();
             services.AddCustomHealthChecks(Configuration);
             services.AddApiVersioningWithDefaultOptions();
-
+            
             services.AddEventBus(Configuration);
+            services.AddCustomDbContext(Configuration);
             services.AddApplicationConfiguration(Configuration);
 
             var container = AutofacContainerFactory.Create(services);
             return new AutofacServiceProvider(container);
         }
 
-        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app)
         {
             app.UseExceptionsMiddleware();
             app.UseCorsWithAllowedAnyPolicy();
@@ -50,6 +49,8 @@ namespace WebAppOnDocker.Api
             app.UseCustomHealthChecks();
 
             app.ConfigureEventBus();
+
+            _logger.LogInformation("{program} successfully started.", typeof(Startup).Namespace);
         }
     }
 }

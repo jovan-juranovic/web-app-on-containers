@@ -16,9 +16,10 @@ namespace WebAppOnDocker.Api.Extensions
 
             hcBuilder.AddCheck("liveness", () => HealthCheckResult.Healthy());
 
-            var serviceBusConnectionString = configuration["EventBusConnectionString"];
+            var serviceBusConnectionString = configuration["EventBus:ConnectionString"];
             var serviceBusConnection = new ServiceBusConnectionStringBuilder(serviceBusConnectionString);
 
+            hcBuilder.AddSqlServer(configuration["Database:ConnectionString"], name: "web-app-on-containers-db-sb-check", tags: new[] { "web-app-on-containers-db-sb" });
             hcBuilder.AddAzureServiceBusTopic(serviceBusConnection.GetNamespaceConnectionString(), serviceBusConnection.EntityPath, "service-bus-check", tags: new[] {"service-bus"});
 
             return services;
