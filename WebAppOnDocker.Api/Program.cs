@@ -8,6 +8,7 @@ using System;
 using System.IO;
 using WebAppOnDocker.Api.Extensions;
 using WebAppOnDocker.Infrastructure;
+using WebAppOnDocker.Shared.EventBus.IntegrationEventLogEF;
 
 namespace WebAppOnDocker.Api
 {
@@ -27,6 +28,7 @@ namespace WebAppOnDocker.Api
             {
                 logger.LogInformation("Applying migrations ({appName})", appName);
 
+                host.MigrateDbContext<ApplicationContext>((_, __) => { });
                 host.MigrateDbContext<IntegrationEventLogContext>((_, __) => { });
 
                 logger.LogInformation("Starting web host ({appName})...", appName);

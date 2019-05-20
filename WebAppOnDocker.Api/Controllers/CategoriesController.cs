@@ -4,13 +4,11 @@ using WebAppOnDocker.Shared.EventBus.Abstractions;
 
 namespace WebAppOnDocker.Api.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ValuesController : ControllerBase
+    public class CategoriesController : BaseApiController
     {
         private readonly IEventBus _bus;
 
-        public ValuesController(IEventBus bus)
+        public CategoriesController(IEventBus bus)
         {
             _bus = bus;
         }

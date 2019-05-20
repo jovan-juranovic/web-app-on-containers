@@ -1,10 +1,9 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace WebAppOnDocker.Infrastructure.Migrations
+namespace WebAppOnDocker.Shared.Migrations
 {
-    public partial class IntegrationEventInitial : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,8 +11,6 @@ namespace WebAppOnDocker.Infrastructure.Migrations
                 name: "IntegrationEventLog",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     EventId = table.Column<Guid>(nullable: false),
                     EventTypeName = table.Column<string>(nullable: false),
                     State = table.Column<int>(nullable: false),
@@ -24,7 +21,7 @@ namespace WebAppOnDocker.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_IntegrationEventLog", x => x.Id);
+                    table.PrimaryKey("PK_IntegrationEventLog", x => x.EventId);
                 });
         }
 

@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using WebAppOnDocker.Infrastructure;
+using WebAppOnDocker.Shared.EventBus.IntegrationEventLogEF;
 
-namespace WebAppOnDocker.Infrastructure.Migrations
+namespace WebAppOnDocker.Shared.Migrations
 {
     [DbContext(typeof(IntegrationEventLogContext))]
     partial class IntegrationEventLogContextModelSnapshot : ModelSnapshot
@@ -19,18 +19,15 @@ namespace WebAppOnDocker.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("WebAppOnDocker.Infrastructure.IntegrationEventLogEntry", b =>
+            modelBuilder.Entity("WebAppOnDocker.Shared.EventBus.IntegrationEventLogEF.IntegrationEventLogEntry", b =>
                 {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<Guid>("EventId")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Content")
                         .IsRequired();
 
                     b.Property<DateTime>("CreationTime");
-
-                    b.Property<Guid>("EventId");
 
                     b.Property<string>("EventTypeName")
                         .IsRequired();
@@ -41,7 +38,7 @@ namespace WebAppOnDocker.Infrastructure.Migrations
 
                     b.Property<string>("TransactionId");
 
-                    b.HasKey("Id");
+                    b.HasKey("EventId");
 
                     b.ToTable("IntegrationEventLog");
                 });

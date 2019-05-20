@@ -8,6 +8,7 @@ using System;
 using System.Data.SqlClient;
 using System.Reflection;
 using WebAppOnDocker.Infrastructure;
+using WebAppOnDocker.Shared.EventBus.IntegrationEventLogEF;
 
 namespace WebAppOnDocker.Api.Extensions
 {
@@ -20,7 +21,17 @@ namespace WebAppOnDocker.Api.Extensions
                 options.UseSqlServer(configuration["Database:ConnectionString"],
                                      sqlOptions =>
                                      {
-                                         sqlOptions.MigrationsAssembly(typeof(IntegrationEventLogContext).GetTypeInfo().Assembly.GetName().Name);
+                                         sqlOptions.MigrationsAssembly(typeof(ApplicationContext).GetTypeInfo().Assembly.GetName().Name);
+                                         sqlOptions.EnableRetryOnFailure(maxRetryCount: 10, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                                     });
+            });
+
+            services.AddDbContext<ApplicationContext>(options =>
+            {
+                options.UseSqlServer(configuration["Database:ConnectionString"],
+                                     sqlOptions =>
+                                     {
+                                         sqlOptions.MigrationsAssembly(typeof(ApplicationContext).GetTypeInfo().Assembly.GetName().Name);
                                          sqlOptions.EnableRetryOnFailure(maxRetryCount: 10, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
                                      });
             });
