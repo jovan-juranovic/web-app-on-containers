@@ -14,30 +14,31 @@ namespace WebAppOnDocker.Api
 {
     public class Program
     {
+        public static readonly string AppName = typeof(Program).Namespace;
+
         public static void Main(string[] args)
         {
-            var appName = typeof(Program).Namespace;
             var configuration = CreateConfiguration();
 
             var host = CreateWebHost(configuration, args);
             var logger = host.Services.GetRequiredService<ILogger<Program>>();
 
-            logger.LogInformation("Web host successfully configured ({appName})", appName);
+            logger.LogInformation("Web host successfully configured ({appName})", AppName);
 
             try
             {
-                logger.LogInformation("Applying migrations ({appName})", appName);
+                logger.LogInformation("Applying migrations ({appName})", AppName);
 
                 host.MigrateDbContext<ApplicationContext>((_, __) => { });
                 host.MigrateDbContext<IntegrationEventLogContext>((_, __) => { });
 
-                logger.LogInformation("Starting web host ({appName})...", appName);
+                logger.LogInformation("Starting web host ({appName})...", AppName);
 
                 host.Run();
             }
             catch (Exception ex)
             {
-                logger.LogCritical(ex, "Program terminated unexpectedly ({appName})!", appName);
+                logger.LogCritical(ex, "Program terminated unexpectedly ({appName})!", AppName);
             }
         }
 

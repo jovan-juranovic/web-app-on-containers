@@ -46,6 +46,7 @@ namespace WebAppOnDocker.Api.Extensions
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
 
             eventBus.Subscribe<DummyIntegrationEvent, IIntegrationEventHandler<DummyIntegrationEvent>>();
+            eventBus.Subscribe<CategoryAddedIntegrationEvent, IIntegrationEventHandler<CategoryAddedIntegrationEvent>>();
         }
     }
 }

@@ -54,6 +54,8 @@ namespace WebAppOnDocker.Shared.EventBus.IntegrationEventLogEF.Services
             _context.Database.UseTransaction(transaction.GetDbTransaction());
             _context.IntegrationEventLogs.Add(eventLogEntry);
 
+            throw new Exception("Testing atomicity");
+
             return _context.SaveChangesAsync();
         }
 

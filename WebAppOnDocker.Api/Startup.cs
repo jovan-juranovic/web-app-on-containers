@@ -35,6 +35,8 @@ namespace WebAppOnDocker.Api
             services.AddCustomDbContext(Configuration);
             services.AddApplicationConfiguration(Configuration);
 
+            services.AddIntegrationEventServices();
+
             var container = AutofacContainerFactory.Create(services);
             return new AutofacServiceProvider(container);
         }

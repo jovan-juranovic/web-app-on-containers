@@ -1,16 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using WebAppOnDocker.Shared.EventBus.Abstractions;
+using System.Threading.Tasks;
+using WebAppOnDocker.Api.Application.IntegrationEvents.Events;
+using WebAppOnDocker.Core.Model;
+using WebAppOnDocker.Infrastructure;
+using WebAppOnDocker.Shared.EventBus.IntegrationEventLogEF.Services;
 
 namespace WebAppOnDocker.Api.Controllers
 {
     public class CategoriesController : BaseApiController
     {
-        private readonly IEventBus _bus;
+        private readonly ApplicationContext _context;
+        private readonly IIntegrationEventService _integrationEventService;
 
-        public CategoriesController(IEventBus bus)
+        public CategoriesController(ApplicationContext context, IIntegrationEventService integrationEventService)
         {
-            _bus = bus;
+            _context = context;
+            _integrationEventService = integrationEventService;
         }
 
         [HttpGet]
@@ -26,8 +32,22 @@ namespace WebAppOnDocker.Api.Controllers
         }
 
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> AddCategory([FromBody] string name)
         {
+            var category = new Category
+            {
+                Name = name,
+                Description = "some desc",
+                CategoryTypeId = CategoryType.Azure.Id
+            };
+
+            _context.Categories.Add(category);
+            var categoryAddedEvent = new CategoryAddedIntegrationEvent(name);
+
+            await _integrationEventService.SaveChangesIncludingEventLogAsync(categoryAddedEvent);
+            await _integrationEventService.PublishThroughEventBusAsync(categoryAddedEvent);
+
+            return Ok();
         }
 
         [HttpPut("{id}")]
