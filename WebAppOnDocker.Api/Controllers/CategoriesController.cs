@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using WebAppOnDocker.Api.Application.IntegrationEvents.Events;
 using WebAppOnDocker.Core.Model;
 using WebAppOnDocker.Infrastructure;
+using WebAppOnDocker.Infrastructure.Http.OfferRequestProcessor;
 using WebAppOnDocker.Shared.EventBus.IntegrationEventLogEF.Services;
 
 namespace WebAppOnDocker.Api.Controllers
@@ -12,17 +13,20 @@ namespace WebAppOnDocker.Api.Controllers
     {
         private readonly ApplicationContext _context;
         private readonly IIntegrationEventService _integrationEventService;
+        private readonly IOfferRequestProcessorClient _offerRequestProcessor;
 
-        public CategoriesController(ApplicationContext context, IIntegrationEventService integrationEventService)
+        public CategoriesController(ApplicationContext context, IIntegrationEventService integrationEventService, IOfferRequestProcessorClient offerRequestProcessor)
         {
             _context = context;
             _integrationEventService = integrationEventService;
+            _offerRequestProcessor = offerRequestProcessor;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public async Task<IActionResult> Get()
         {
-            return new[] { "value1", "value2" };
+            var result = await _offerRequestProcessor.GetAsync();
+            return Ok(new[] { result, "value2" });
         }
 
         [HttpGet("{id}")]

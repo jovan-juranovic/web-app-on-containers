@@ -34,6 +34,7 @@ namespace WebAppOnDocker.Api
             services.AddEventBus(Configuration);
             services.AddCustomDbContext(Configuration);
             services.AddApplicationConfiguration(Configuration);
+            services.AddExternalHttpApis(Configuration);
 
             services.AddIntegrationEventServices();
 
